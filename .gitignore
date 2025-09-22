@@ -2,7 +2,10 @@
 __pycache__/
 *.py[codz]
 *$py.class
-
+.pytest_cache
+.venv
+.vscode
+..vscode
 # C extensions
 *.so
 
