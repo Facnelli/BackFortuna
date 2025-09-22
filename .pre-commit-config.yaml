@@ -3,6 +3,6 @@ repos:
     hooks:
       - id: freeze-requirements
         name: Freeze requirements.txt
-        entry: python -m pip freeze > requirements.txt
+        entry: python -c "import subprocess; subprocess.run(['python','-m','pip','freeze'], stdout=open('requirements.txt','w')); subprocess.run(['git','add','requirements.txt'])"
         language: system
         pass_filenames: false
