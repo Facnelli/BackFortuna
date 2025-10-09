@@ -1,4 +1,4 @@
-x = 1 + 2  # espaços errados
+x = 1+ 2  # espaços errados
 y = 3
 z = 1
 

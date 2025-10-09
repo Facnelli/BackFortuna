@@ -1,4 +1,0 @@
-# Configuração mínima do Ruff
-select = ["F", "E", "W", "C"]  # Ativa regras de estilo e linting
-ignore = []                    # Nenhuma regra ignorada
-exclude = [".venv", "build", "__pycache__"]  # Pastas ignoradas

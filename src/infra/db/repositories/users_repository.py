@@ -1,0 +1,20 @@
+from src.infra.db.settings.connection import DBconnectionHandler
+from src.infra.db.entities.users import Users as UsersEntity
+
+
+class UsersRepository:
+    
+    @classmethod
+    def insert_user(cls, user_name: str, email: str, senha: str) -> None:
+        with DBconnectionHandler() as database: 
+            try:
+                new_resistry = UsersEntity(
+                    user_name = user_name,
+                    email = email,
+                    senha = senha,
+                )
+                database.session.add(new_resistry)
+                database.session.commit()
+            except Exception as exception:
+                database.session.rollback()
+                raise exception
