@@ -1,7 +1,11 @@
+from typing import List
 from src.infra.db.settings.connection import DBconnectionHandler
 from src.infra.db.entities.users import Users as UsersEntity
+from src.data.interfaces.users_repository import UsersRepositoryInterface
+from src.domain.models.users import Users
 
-class UsersRepository:
+
+class UsersRepository(UsersRepositoryInterface):
     
     @classmethod
     def insert_user(cls, user_name: str, email: str, senha: str) -> None:
@@ -18,7 +22,7 @@ class UsersRepository:
                 database.session.rollback()
                 raise exception
     @classmethod
-    def select_user(cls, user_name: str) -> any:
+    def select_user(cls, user_name: str) -> List[Users]:
         with DBconnectionHandler() as database:
             try:
                 users = (
