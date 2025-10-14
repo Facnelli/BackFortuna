@@ -1,7 +1,6 @@
 from src.infra.db.settings.connection import DBconnectionHandler
 from src.infra.db.entities.users import Users as UsersEntity
 
-
 class UsersRepository:
     
     @classmethod
@@ -15,11 +14,9 @@ class UsersRepository:
                 )
                 database.session.add(new_resistry)
                 database.session.commit()
-                
             except Exception as exception:
                 database.session.rollback()
                 raise exception
-    
     @classmethod
     def select_user(cls, user_name: str) -> any:
         with DBconnectionHandler() as database:
