@@ -5,7 +5,7 @@ from src.domain.models.users import Users
 class UsersRepositoryInterface(ABC):
 
     @abstractmethod
-    def insert_user(self, user_name: str, email: str, senha: str) -> None: pass
+    def insert_user(self, user_name: str, email: str, password: str) -> None: pass
 
     @abstractmethod
     def select_user(self, user_name: str) -> List[Users]: pass

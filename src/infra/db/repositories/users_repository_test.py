@@ -10,24 +10,24 @@ connection = db_connection_handler.get_engine().connect()
 def test_insert_user():
     mocked_user_name = 'name'
     mocked_email = 'name@gmail.com'
-    mocked_senha = 'senha'
+    mocked_password = 'password'
     
     users_repository = UsersRepository()
-    users_repository.insert_user(mocked_user_name, mocked_email, mocked_senha)
+    users_repository.insert_user(mocked_user_name, mocked_email, mocked_password)
     
     sql = '''
         SELECT * FROM users
         WHERE user_name = '{}'
         AND email = '{}'
-        AND senha = '{}'
-        '''.format(mocked_user_name, mocked_email, mocked_senha)
+        AND password = '{}'
+        '''.format(mocked_user_name, mocked_email, mocked_password)
         
     response = connection.execute(text(sql))
     registry = response.fetchall()[0]
     
     assert registry.user_name == mocked_user_name
     assert registry.email == mocked_email
-    assert registry.senha == mocked_senha
+    assert registry.password == mocked_password
     
     connection.execute(text(f'''
         DELETE FROM users WHERE id = {registry.id}
@@ -38,11 +38,11 @@ def test_insert_user():
 def test_select_user():
     mocked_user_name = 'name2'
     mocked_email = 'name2@gmail.com'
-    mocked_senha = 'senha2'
+    mocked_password = 'password2'
     
     sql = '''
-        INSERT INTO users (user_name, email, senha) VALUES ('{}','{}','{}')
-    '''.format(mocked_user_name, mocked_email, mocked_senha)
+        INSERT INTO users (user_name, email, password) VALUES ('{}','{}','{}')
+    '''.format(mocked_user_name, mocked_email, mocked_password)
     
     connection.execute(text(sql))
     connection.commit()
@@ -52,7 +52,7 @@ def test_select_user():
     
     assert response[0].user_name == mocked_user_name
     assert response[0].email == mocked_email
-    assert response[0].senha == mocked_senha
+    assert response[0].password == mocked_password
     
     connection.execute(text(f'''
         DELETE FROM users WHERE id = {response[0].id}

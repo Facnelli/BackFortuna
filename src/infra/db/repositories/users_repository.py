@@ -8,13 +8,13 @@ from src.domain.models.users import Users
 class UsersRepository(UsersRepositoryInterface):
     
     @classmethod
-    def insert_user(cls, user_name: str, email: str, senha: str) -> None:
+    def insert_user(cls, user_name: str, email: str, password: str) -> None:
         with DBconnectionHandler() as database: 
             try:
                 new_resistry = UsersEntity(
                     user_name = user_name,
                     email = email,
-                    senha = senha,
+                    password = password,
                 )
                 database.session.add(new_resistry)
                 database.session.commit()
