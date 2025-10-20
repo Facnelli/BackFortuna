@@ -15,8 +15,8 @@ class UserFinder(UserFinderInterface):
 
         return response
 
-    @classmethod
-    def __validate_name(cls, user_name: str) -> None:
+    @staticmethod
+    def __validate_name(user_name: str) -> None:
         if not user_name.isalpha():
             raise Exception("Invalid user name")
 
@@ -29,8 +29,8 @@ class UserFinder(UserFinderInterface):
 
         return users
 
-    @classmethod
-    def __format_response(cls, users: List[Users]) -> Dict:
+    @staticmethod
+    def __format_response(users: List[Users]) -> Dict:
         attributes = []
         for user in users:
             attributes.append({"user_name": user.user_name, "email": user.email})
@@ -38,6 +38,6 @@ class UserFinder(UserFinderInterface):
         response = {
             "type": "Users",
             "count": len(users),
-            "attributes": users
+            "attributes": attributes
         }
         return response
