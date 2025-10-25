@@ -3,12 +3,10 @@ from passlib.context import CryptContext
 from email_validator import validate_email, EmailNotValidError
 from src.domain.use_cases.user_register import UserRegister as UserRegisterInterface
 from src.data.interfaces.users_repository import UsersRepositoryInterface
+from src.errors.types import HttpBadRequestError
 
 # Contexto de hash(argon2)
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
-
-class RegistrationError(Exception):
-    pass
 
 class UserRegister(UserRegisterInterface):
     def __init__(self, user_repository: UsersRepositoryInterface) -> None:
@@ -26,11 +24,11 @@ class UserRegister(UserRegisterInterface):
 
     @classmethod
     def __validate_name(cls, user_name: str) -> None:
-        if not user_name.isalpha():
-            raise RegistrationError("Invalid user name")
+        if not all(c.isalpha() or c.isspace() for c in user_name):
+            raise HttpBadRequestError("Invalid user name")
 
         if len(user_name) > 25:
-            raise RegistrationError("User name is too long")
+            raise HttpBadRequestError("User name is too long")
 
     @staticmethod
     def __validate_email(email: str) -> str:
@@ -38,12 +36,12 @@ class UserRegister(UserRegisterInterface):
             valid = validate_email(email)
             return valid.normalized
         except EmailNotValidError as e:
-            raise RegistrationError(f"Invalid email: {str(e)}")
+            raise HttpBadRequestError(f"Invalid email: {str(e)}")
 
     @staticmethod
     def __hash_password(password: str) -> str:
         if not password:
-            raise RegistrationError("Password cannot be empty")
+            raise HttpBadRequestError("Password cannot be empty")
         return pwd_context.hash(password)
 
     def __registry_user_data(self, user_name: str, email: str, password_hash: str) -> None:

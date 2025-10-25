@@ -26,7 +26,7 @@ def test_find_error_in_valid_name():
         assert str(e) == "Invalid user name"
 
 def test_find_error_in_long_name():
-    user_name = "meuNomeaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    user_name = "meuNomeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     repo = UsersRepositorySpy()
     user_finder = UserFinder(repo)
 

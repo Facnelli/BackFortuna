@@ -2,6 +2,7 @@ from typing import Dict, List
 from src.domain.use_cases.user_finder import UserFinder as UserFinderInterface
 from src.data.interfaces.users_repository import UsersRepositoryInterface
 from src.domain.models.users import Users
+from src.errors.types import HttpNotFoundError, HttpBadRequestError
 
 class UserFinder(UserFinderInterface):
 
@@ -17,15 +18,15 @@ class UserFinder(UserFinderInterface):
 
     @staticmethod
     def __validate_name(user_name: str) -> None:
-        if not user_name.isalpha():
-            raise Exception("Invalid user name")
+        if not all(c.isalpha() or c.isspace() for c in user_name):
+            raise HttpBadRequestError("Invalid user name")
 
-        if len(user_name) > 25:
-            raise Exception("User name is too long")
+        if len(user_name) > 50:
+            raise HttpBadRequestError("User name is too long")
 
     def __search_user(self, user_name: str) -> List[Users]:
         users = self.__users_repository.select_user(user_name)
-        if not users: raise Exception("User not found")
+        if not users: raise HttpNotFoundError("User not found")
 
         return users
 
