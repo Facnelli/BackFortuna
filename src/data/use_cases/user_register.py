@@ -44,7 +44,6 @@ class UserRegister(UserRegisterInterface):
     def __hash_password(password: str) -> str:
         if not password:
             raise RegistrationError("Password cannot be empty")
-        # bcrypt só aceita até 72 bytes
         return pwd_context.hash(password)
 
     def __registry_user_data(self, user_name: str, email: str, password_hash: str) -> None:
