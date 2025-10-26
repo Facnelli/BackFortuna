@@ -1,5 +1,4 @@
 from flask import Blueprint, request, jsonify
-from functools import wraps
 
 #Import adapters
 from src.main.adapters.request_adapter import request_adapter
@@ -8,27 +7,36 @@ from src.main.adapters.request_adapter import request_adapter
 from src.main.composers.user_finder_composer import user_finder_composer
 from src.main.composers.user_register_composer import user_register_composer
 
+#Import validators
+from src.validators.user_register_validator import user_register_validator
+from src.validators.user_finder_validator import user_finder_validator
+
 #import error handler
 from src.errors.error_handler import handle_errors
 
 user_routes_bp = Blueprint('user_routes', __name__)
 
-def handle_route_errors(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        try:
-            http_response = func(*args, **kwargs)
-        except Exception as e:
-            http_response = handle_errors(e)
-        return jsonify(http_response.body), http_response.status_code
-    return wrapper
-
 @user_routes_bp.route('/user/find', methods=['GET'])
-@handle_route_errors
 def find_user():
-    return request_adapter(request, user_finder_composer())
+    http_response = None
 
-@user_routes_bp.route('/user', methods=['POST'])
-@handle_route_errors
+    try:
+        user_finder_validator(request)
+        http_response = request_adapter(request, user_finder_composer())
+    except Exception as e:
+        http_response = handle_errors(e)
+
+    return jsonify(http_response.body), http_response.status_code
+
+@user_routes_bp.route('/user/', methods=['POST'])
 def register_user():
-    return request_adapter(request, user_register_composer())
+    http_response = None
+
+    try:
+        user_register_validator(request)
+        http_response = request_adapter(request, user_register_composer())
+    except Exception as e:
+        http_response = handle_errors(e)
+
+    return jsonify(http_response.body), http_response.status_code
+
